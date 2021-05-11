@@ -17,15 +17,11 @@ public class HealthBar : MonoBehaviour
         slider.maxValue = health;
         slider.value = health;
 
-        // If we want to healthbar to change color from the green to red
-        fill.color = gradient.Evaluate(1f);
     }
 
     public void SetHealth(int health)
     {
         slider.value = health;
 
-        // If we want to healthbar to change color from the green to red
-        fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 }

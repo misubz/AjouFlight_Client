@@ -4,21 +4,10 @@ using UnityEngine;
 
 public abstract class Player : MonoBehaviour
 {
-    public int Id
-    {
-        get { return Id; }
-        set { if (Id >= 0) Id = value; else Debug.Log("Invalid Id."); }
-    }
-    public int Hp
-    {
-        get { return Hp; }
-        set { if (Hp < 0) Hp = 0; else Hp = value; }
-    }
-    public float Speed
-    {
-        get { return Speed; }
-        set { if (Speed < 0) Speed = 0; else Speed = value; }
-    }
+
+    private int id;
+    public int hp;
+    private float speed;
 
     public Rigidbody2D playerRigid;
     public MovementJoystick movementJoystick;
@@ -35,25 +24,25 @@ public abstract class Player : MonoBehaviour
 
     void Awake()
     {
-        Speed = 3.0f;
+        speed = 3.0f;
         playerRigid = GetComponent<Rigidbody2D>();
-        StartCoroutine(Shoot());
+        //StartCoroutine(Shoot());
     }
 
     void Update()
     {
-        Move();
-        Rotate();
+        //Move();
+        //Rotate();
     }
 
-
+    /*
     private void Move()
     {
         float x = movementJoystick.moveJoystickVec2.x;
         float y = movementJoystick.moveJoystickVec2.y;
 
         Vector2 velocity = new Vector2(x, y);
-        velocity = velocity * Speed;
+        velocity = velocity * speed;
         playerRigid.velocity = velocity;
     }
 
@@ -69,13 +58,13 @@ public abstract class Player : MonoBehaviour
 
         gameObject.transform.Rotate(0, 0, angle);
     }
-
+    */
 
     protected virtual IEnumerator Shoot()
     {
         while (true)
         {
-            Instantiate(bullet, bulletPivot.transform.position, bulletPivot.transform.rotation);
+            // Instantiate(bullet, bulletPivot.transform.position, bulletPivot.transform.rotation);
             yield return new WaitForSeconds(0.3f);
         }
     }
@@ -89,8 +78,8 @@ public abstract class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Hp -= damage;
-        if(Hp <= 0)
+        hp -= damage;
+        if(hp <= 0)
         {
             GameManager.GetInstance.GameOver();
         }
