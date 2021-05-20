@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Henchman : Enemy
 {
+    [SerializeField]
     private float speed;
-    
+    [SerializeField]
+    private float bulletSpeed;
+    [SerializeField]
+    private int bulletDamage;
+
+
     void Start()
     {
         StartCoroutine(Shoot());
@@ -18,11 +24,19 @@ public class Henchman : Enemy
     }
 
 
+    protected override void OnDead()
+    {
+        base.OnDead();
+        Destroy(gameObject);
+    }
+
+
     IEnumerator Shoot()
     {
         while (true)
         {
-            // Shoot the enemy bullet.
+            GameObject bullet = Instantiate(enemyBullet, transform.position, transform.rotation);
+            bullet.GetComponent<Bullet>().SetBullet(bulletSpeed, bulletDamage);
             yield return new WaitForSeconds(0.5f);
         }
     }

@@ -4,21 +4,20 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
-    public int Hp { 
-        get { return Hp; } 
-        set { if (Hp < 0) Hp = 0; else Hp = value; }
-    }
-
-    private int moneyAmount;
-    private int scoreAmount;
-
     [SerializeField]
-    private Sprite sprite;
-    
+    private int hp;
+    [SerializeField]
+    private double moneyAmount;
+    [SerializeField]
+    private int scoreAmount;
+    [SerializeField]
+    private HealthBar healthBar;
+
+    public GameObject enemyBullet;
 
     void Start()
     {
-        
+        healthBar.SetMaxHealth(hp);
     }
 
     void Update()
@@ -33,16 +32,32 @@ public abstract class Enemy : MonoBehaviour
     }
 
 
-    public void TakeDamage(int damage)
+    private void TakeDamage(int damage)
     {
-        Hp -= damage;
-        if (Hp <= 0) OnDead();
+        hp -= damage;
+        if (hp <= 0) OnDead();
+        Debug.Log(hp);
+        healthBar.SetHealth(hp);
     }
 
 
     protected virtual void OnDead()
     {
-        // When the enemy die ...
+        GameManager.Instance.AddScore(scoreAmount);
+        GameManager.Instance.Money += 10;
+        
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PlayerBullet"))
+        {
+            Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+            TakeDamage(bullet.Damage);
+            AudioSource bulletAudio = bullet.GetComponent<AudioSource>();
+            bulletAudio.Play();
+        }
     }
 
 }

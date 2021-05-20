@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour, IBullet
 {
-    private Rigidbody2D bulletRigid;
-
-    private enum Type { Player = 0, Enemy }
-    private Type type;
     private float speed;
     private int damage;
-    
+
+    public float Speed
+    {
+        get { return speed; }
+        set { if (value < 0) speed = 0; else speed = value; }
+    }
+
+    public int Damage
+    {
+        get { return damage; }
+        set { if (value < 0) damage = 0; else damage = value; }
+    }
+
+    private Rigidbody2D bulletRigid;
+
+
     void Awake()
     {
+        Destroy(this, 7.0f);
         bulletRigid = GetComponent<Rigidbody2D>();
     }
 
@@ -22,44 +34,16 @@ public class Bullet : MonoBehaviour, IBullet
         MoveForward();
     }
 
+
     public void MoveForward()
     {
-         bulletRigid.velocity = transform.TransformDirection(Vector2.up) * speed;
+        bulletRigid.velocity = transform.TransformDirection(Vector2.up) * Speed;
     }
 
 
-    public void SetBullet(int typeIndex, float speed, int damage)
+    public void SetBullet(float speed, int damage)
     {
-        switch (typeIndex)
-        {
-            case 0:
-                type = Type.Player;
-                break;
-            case 1:
-                type = Type.Enemy;
-                break;
-            default:
-                break;
-        }
-
-        this.speed = speed;
-        this.damage = damage;
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy") && type == Type.Player)
-        {
-            // audioSource.Play();
-            // takeDamage
-            // Enemy hit.
-        }
-        else if(collision.CompareTag("Player") && type == Type.Enemy)
-        {
-            // audioSource.Play();
-            // takeDamage
-            // Player hit.
-        }
+        Speed = speed;
+        Damage = damage;
     }
 }
