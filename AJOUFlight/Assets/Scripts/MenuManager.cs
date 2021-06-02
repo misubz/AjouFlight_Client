@@ -28,6 +28,11 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("StoreScene");
     }
 
+    public void OnClickSettings()
+    {
+        SceneManager.LoadScene("SettingsScene");
+    }
+
     public void OnClickExit()
     {
         Application.Quit();
